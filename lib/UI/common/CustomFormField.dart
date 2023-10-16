@@ -8,12 +8,14 @@ class CustomFormField extends StatefulWidget {
   final bool secureText;
   Validator? validator;
   TextEditingController? controller;
+  int lines;
   CustomFormField({
     required this.hintText,
     this.keyboardType = TextInputType.text,
     this.secureText = false,
     this.validator,
     this.controller,
+    this.lines = 1
   });
 
   @override
@@ -28,6 +30,8 @@ class _CustomFormFieldState extends State<CustomFormField> {
     final validator = widget.validator;
     if (validator is String? Function(String?)?) {
       return TextFormField(
+        maxLines: widget.lines,
+        minLines: widget.lines,
         controller: widget.controller,
         validator: validator,
         obscureText: widget.secureText && obscureText,

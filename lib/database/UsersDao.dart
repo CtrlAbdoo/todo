@@ -5,7 +5,7 @@ class UsersDao{
   static CollectionReference<User> getUserCollection(){
     var db = FirebaseFirestore.instance;
     var userCollection = db.collection(User.collectionName)
-        .withConverter(fromFirestore: (snapshot, options) => User.fromFireStore(snapshot.data()),
+        .withConverter(fromFirestore: (snapshot, options) => User.fromfirestore(snapshot.data()),
       toFirestore: (object, options) => object.toFireStore(),
     );
     return userCollection;
@@ -22,6 +22,8 @@ class UsersDao{
         .doc(uid);
 
     var docSnapshot = await doc.get();
+    print(await docSnapshot.data());
+    print('/////////');
     return docSnapshot.data();
   }
 }

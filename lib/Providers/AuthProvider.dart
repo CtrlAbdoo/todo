@@ -23,11 +23,20 @@ class AuthProvider extends ChangeNotifier {
         email: email));
   }
   Future<void> login(var email, var password)async{
+    print(('=================='));
+
     final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email, password: password);
+    print(('++++++'));
+    print(result.user?.uid??'#############');
+
     var user = await UsersDao.getUser(result.user!.uid);
+    print(('=================='));
+    print(user?.fullName??'#############');
+
     databaseUser = user;
     firebaseAuthUser = result.user;
+    notifyListeners();
   }
 
   void logout() {

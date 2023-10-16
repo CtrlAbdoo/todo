@@ -12,12 +12,20 @@ class User{
     this.email
 });
 
-  User.fromFireStore(Map<String,dynamic>? data){
-    id = data?['id'];
-    fullName = data?['fullName'];
-    userName = data?['userName'];
-    email = data?['email'];
+  User.fromfirestore(Map<String, dynamic>? data) {
+    if (data != null) {
+      id = data['id'];
+      fullName = data['fullName'];
+      userName = data['userName'];
+      email = data['email'];
+    }
   }
+  // User.fromFireStore(Map<String,dynamic>? data){
+  //   id = data?['id'];
+  //   fullName = data?['fullName'];
+  //   userName = data?['userName'];
+  //   email = data?['email'];
+  // }
   Map<String , dynamic>toFireStore(){
     return{
       'id':id,

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/Providers/AuthProvider.dart';
 import 'package:todo/UI/Login/LoginScreen.dart';
 import 'package:todo/UI/settings/settings_tab.dart';
+import 'package:todo/UI/tasks_list/AddTaskSheet.dart';
 import 'package:todo/UI/tasks_list/todos_list_tab.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -50,7 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 5
             )
           ),
-          onPressed: () {},
+          onPressed: () {
+            showAddTaskBottomSheet();
+          },
           child: Icon(
             Icons.add,
             color: Colors.white,
@@ -89,4 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
 
   var tabs = [TasksListTab(),SettingsTab()];
+
+  void showAddTaskBottomSheet() {
+    showModalBottomSheet(context: context,
+        builder: (context) {
+          return AddTaskBottomSheet();
+        },
+    );
+  }
 }

@@ -1,10 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todo/FireBaseErrorCodes.dart';
+import 'package:todo/Providers/AuthProvider.dart';
 import 'package:todo/UI/DialogUtils.dart';
+import 'package:todo/UI/Home/HomeScreen.dart';
 import 'package:todo/UI/Register/RegisterScreen.dart';
 import 'package:todo/UI/common/CustomFormField.dart';
 import 'package:todo/ValidationUtilities.dart';
+import 'package:todo/database/UsersDao.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String routeName = 'LoginScreen';
@@ -14,9 +18,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController email = TextEditingController();
+  TextEditingController email = TextEditingController(text: "abdooal@gmail.com");
 
-  TextEditingController password = TextEditingController();
+  TextEditingController password = TextEditingController(text: '123456');
 
   var formkey = GlobalKey<FormState>();
 
@@ -137,24 +141,29 @@ class _LoginScreenState extends State<LoginScreen> {
         ));
   }
 
-  void login() async{
+  void login() async {
     if (formkey.currentState?.validate() == false) {
       return;
     }
+    var authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
-      DialogUtils.showLoading(context, 'Loading....',isCancelable: false);
-      final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: email.text,
-          password: password.text
-      );
+      DialogUtils.showLoading(context, 'Loading....', isCancelable: false);
+      await authProvider.login(email.text, password.text);
       DialogUtils.hideDialog(context);
-      print(result.user?.uid);
+      DialogUtils.showMessage(
+          context, 'user logged in successfuly',
+          posActionTitle: 'Ok', posAction: () {
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      }, negActionTitle: 'No');
     } on FirebaseAuthException catch (e) {
-      if (e.code == FireBaseErrorCodes.userNotFound) {
-        print('No user found for that email.');
-      } else if (e.code == FireBaseErrorCodes.wrongPassword) {
-        print('Wrong password provided for that user.');
-      }
+      DialogUtils.hideDialog(context);
+
+      if (e.code == FireBaseErrorCodes.userNotFound ||
+          e.code == FireBaseErrorCodes.wrongPassword ||
+          e.code == FireBaseErrorCodes.invalidCredintionals)
+        DialogUtils.showMessage(context, 'wrong email or password',
+        posActionTitle: 'Ok'
+        );
     }
   }
 }

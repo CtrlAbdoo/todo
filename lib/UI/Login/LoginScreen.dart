@@ -18,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController email = TextEditingController(text: "thenonghost15@gmail.com");
+  TextEditingController email = TextEditingController(text: "abdooal@gmail.com");
 
   TextEditingController password = TextEditingController(text: '123456');
 

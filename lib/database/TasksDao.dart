@@ -3,7 +3,7 @@ import 'package:todo/database/UsersDao.dart';
 import 'package:todo/database/model/Task.dart';
 
 class TasksDao{
-   static CollectionReference<Task> getTasksCollection(String uid){
+  static CollectionReference<Task> getTasksCollection(String uid){
     return UsersDao.getUserCollection()
         .doc(uid)
         .collection(Task.CollectionName)
@@ -18,5 +18,20 @@ class TasksDao{
 
     task.id = docRef.id;
     return docRef.set(task);
+  }
+  static Future<List<Task>> getAllTasks(String uid)async{
+    var taskSnapShot = await getTasksCollection(uid).get();
+    var taskList = taskSnapShot.docs
+    .map((snapshot) => snapshot.data()).toList();
+
+    return taskList;
+  }
+  static Stream<QuerySnapshot<Task>> listenForTasks(String uid)async*{
+    yield* getTasksCollection(uid).snapshots();
+  }
+  static Future<void> removeTask(String taskId,String uid) {
+    return getTasksCollection(uid)
+        .doc(taskId)
+        .delete();
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:todo/Providers/AuthProvider.dart';
 import 'package:todo/UI/tasks_list/TaskWidget.dart';
 import 'package:todo/database/TasksDao.dart';
+import 'package:todo/UI/Login/LoginScreen.dart';
 
 class TasksListTab extends StatelessWidget {
   @override
@@ -19,15 +20,21 @@ class TasksListTab extends StatelessWidget {
               }
               if (snapshot.hasError) {
                 return Center(
-                  child: AlertDialog(
-                    title: Text("Error"),
-                    content: Text("An error occurred. Please try again!"),
-                    actions: [
-                      ElevatedButton(
-                        onPressed: () {
-                          // Retry the request or take necessary action.
-                        },
-                        child: Text("Try Again"),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      AlertDialog(
+                        title: Text("Error"),
+                        content: Text("An error occurred. Please try again!"),
+                        actions: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.of(context).pushReplacementNamed(LoginScreen.routeName);
+                            },
+                            child: Text("Try Again"),
+                          ),
+
+                        ],
                       ),
                     ],
                   ),
